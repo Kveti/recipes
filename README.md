@@ -1,2 +1,6 @@
 # recipes
-flask + sqlalchemy portal for recipes
+flask + sqlalchemy app for managing recipes
+
+- users
+- recipes
+- ingredients

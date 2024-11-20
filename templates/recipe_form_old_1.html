@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if recipe %}Edit Recipe{% else %}Add Recipe{% endif %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>{% if recipe %}Edit Recipe{% else %}Add Recipe{% endif %}</h2>
+        <form method="POST">
+            <!-- Recipe Title -->
+            <div class="form-group">
+                <label for="title">Recipe Title:</label>
+                <input type="text" name="title" class="form-control" value="{{ recipe.title if recipe else '' }}" required>
+            </div>
+
+            <!-- Recipe Instructions -->
+            <div class="form-group">
+                <label for="instructions">Instructions:</label>
+                <textarea name="instructions" class="form-control" rows="4" required>{{ recipe.instructions if recipe else '' }}</textarea>
+            </div>
+
+            <!-- Ingredients -->
+            <h3>Ingredients</h3>
+            <div id="ingredients-container">
+                {% if recipe %}
+                    {% for recipe_ingredient in recipe.recipe_ingredients %}
+                        <div class="form-row ingredient-row">
+                            <div class="col-md-5">
+                                <input type="text" name="ingredient" class="form-control" value="{{ recipe_ingredient.ingredient.name }}" placeholder="Ingredient Name" required>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" name="quantity" class="form-control" value="{{ recipe_ingredient.quantity }}" placeholder="Quantity" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="form-row ingredient-row">
+                        <div class="col-md-5">
+                            <input type="text" name="ingredient" class="form-control" placeholder="Ingredient Name" required>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" name="quantity" class="form-control" placeholder="Quantity" required>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Add New Ingredient Button -->
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" id="add-ingredient-btn">Add Ingredient</button>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Save Recipe</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        // Add new ingredient fields
+        $('#add-ingredient-btn').on('click', function() {
+            var ingredientRow = `
+                <div class="form-row ingredient-row">
+                    <div class="col-md-5">
+                        <input type="text" name="ingredient" class="form-control" placeholder="Ingredient Name" required>
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" name="quantity" class="form-control" placeholder="Quantity" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
+                    </div>
+                </div>
+            `;
+            $('#ingredients-container').append(ingredientRow);
+        });
+
+        // Remove ingredient fields
+        $(document).on('click', '.remove-ingredient-btn', function() {
+            $(this).closest('.ingredient-row').remove();
+        });
+    </script>
+</body>
+</html>
