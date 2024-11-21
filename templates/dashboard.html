@@ -31,9 +31,11 @@
             gap: 10px;
         }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
 </head>
 <body>
     <h2>Dashboard</h2>
+    <a href="{{ url_for('logout') }}">Logout</a>
     {% if session['role'] == 'admin' %}
         <h3>Users</h3>
         <ul>
@@ -41,6 +43,9 @@
                 <li>[{{ user.id}}] {{ user.username }} ({{ user.role }})</li>
             {% endfor %}
         </ul>
+        <form action="{{ url_for('user_bp.add_user') }}" method="GET" style="display:inline;">
+            <button type="submit" class="btn btn-secondary" style="background-color: #007bff; border-color: #007bff;">Add User</button>
+        </form>
     {% endif %}
     
     <h3>Recipes</h3>
@@ -51,14 +56,18 @@
                     <a href="/recipe/{{recipe.id}}"> {{ recipe.title }} </a> 
                 </div>
                 <div class="right-elements">
-                    <a href="{{ url_for('recipe_bp.recipe_edit', id=recipe.id) }}">Edit</a> |
+                    <form action="{{ url_for('recipe_bp.recipe_edit', id=recipe.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-secondary" style="background-color: #007bff; border-color: #007bff;">Edit</button>
+                    </form> |
                     <form action="{{ url_for('recipe_bp.delete_recipe', id=recipe.id) }}" method="POST" style="display:inline;">
-                        <button type="submit">Delete</button>
+                        <button type="submit" class="btn btn-secondary" style="background-color: #007bff; border-color: #007bff;">Delete</button>
                     </form>
                 </div>
             </li>
         {% endfor %}
     </ul>
-    <a href="{{ url_for('recipe_bp.recipe_add') }}">Add Recipe</a>
+    <form action="{{ url_for('recipe_bp.recipe_add') }}" method="GET" style="display:inline;">
+        <button type="submit"  class="btn btn-secondary" style="background-color: #007bff; border-color: #007bff;">Add Recipe</button> <!--style="background-color: #007bff; color: white; border-color: #007bff;"-->
+    </form>
 </body>
 </html>

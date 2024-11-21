@@ -9,32 +9,6 @@ recipe_bp = Blueprint('recipe_bp', __name__)
 def home():
     return redirect(url_for('dashboard'))
 
-# Route for login page
-
-## Dashboard - Only accessible by Admin and User
-#@recipe_bp.route('/dashboard')
-#def dashboard():
-#    if 'user_id' not in session:
-#        return redirect(url_for('login'))
-#
-#    users = None
-#    if session['role'] == RoleEnum.ADMIN.value:
-#        users = User.query.all()
-#    
-#    recipes = Recipe.query.filter_by(user_id=session['user_id']).all()
-#    rus = RecipeUser.query.filter_by(user_id=session["user_id"]).all()
-#    ret = ""
-#    for ru in rus:
-#        ret = ret + "ru id: " + str(ru.recipe_id) + "<br/>"
-#        r = Recipe.query.get(id=ru.recipe_id)
-#        ret = ret + "r id: " + Recipe.query.get(id=ru.recipe_id).id + "<br/>"
-#        recipes.append(Recipe.query.get(id=ru.recipe_id))
-#    return "Hello"
-#    #return render_template('dashboard.html', users=users, recipes=recipes)
-#    
-
-
-
 @recipe_bp.route('/recipes')
 def recipes():
     if 'user_id' not in session:
@@ -162,8 +136,17 @@ def delete_recipe(id):
     
     recipe = Recipe.query.get_or_404(id)
     if recipe.user_id == session['user_id'] or session['role'] == RoleEnum.ADMIN.value:
+
+        
+
+        rus = RecipeUser.query.filter_by(recipe_id=id).all()
+        for ru in rus:
+            db.session.delete(ru)
+            db.session.commit()
+
         db.session.delete(recipe)
         db.session.commit()
+
         flash('Recipe deleted successfully!', 'danger')
     else:
         flash('You are not authorized to delete this recipe.', 'warning')
