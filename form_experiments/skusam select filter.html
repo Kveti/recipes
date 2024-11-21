@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Selection Form</title>
+    <style>
+        /* Styling for the filter input */
+        .filter-input {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Select a Car</h2>
+
+    <!-- Input field for filtering -->
+    <input type="text" id="carFilter" class="filter-input" placeholder="Filter cars...">
+
+    <!-- Car selection form -->
+    <form>
+        <label for="car">Choose a car:</label>
+        <select id="car" name="car">
+            <optgroup label="German Cars">
+                <option value="audi">Audi</option>
+                <option value="bmw">BMW</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="porsche">Porsche</option>
+            </optgroup>
+            <optgroup label="Swedish Cars">
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+            </optgroup>
+        </select>
+    </form>
+
+    <script>
+        // Filter function
+        document.getElementById('carFilter').addEventListener('input', function() {
+            let filterValue = this.value.toLowerCase();
+            let options = document.querySelectorAll('select#car option');
+            
+            options.forEach(function(option) {
+                // Make options visible or hidden based on filter
+                if (option.text.toLowerCase().includes(filterValue)) {
+                    option.style.display = 'block';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

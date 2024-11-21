@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Selection with Filter</title>
+    <style>
+        /* Styling for the dropdown and its elements */
+        .custom-select-wrapper {
+            position: relative;
+            width: 200px;
+        }
+
+        .select-box {
+            width: 100%;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+
+        .select-options {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            background-color: white;
+            display: none;
+            z-index: 1;
+        }
+
+        .select-options input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .group {
+            font-weight: bold;
+            margin-top: 10px;
+            padding-left: 10px;
+            background-color: #f5f5f5;
+        }
+
+        .option {
+            padding: 8px;
+            cursor: pointer;
+            padding-left: 20px;
+        }
+
+        .option:hover {
+            background-color: #f1f1f1;
+        }
+
+        .other-input-wrapper {
+            padding: 10px;
+            display: none;
+        }
+
+        /* Styling for the form */
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Select a Car</h2>
+
+    <!-- Form with Custom Select Dropdown -->
+    <form id="carForm">
+        <div class="custom-select-wrapper">
+            <div class="select-box" id="selectBox">Choose a car</div>
+            <div class="select-options" id="selectOptions">
+                <input type="text" id="filterInput" placeholder="Filter cars...">
+                <!-- German Cars Group -->
+                <div class="group">German Cars</div>
+                <div class="option" data-value="audi">Audi</div>
+                <div class="option" data-value="bmw">BMW</div>
+                <div class="option" data-value="mercedes">Mercedes</div>
+                <div class="option" data-value="porsche">Porsche</div>
+                <!-- Swedish Cars Group -->
+                <div class="group">Swedish Cars</div>
+                <div class="option" data-value="volvo">Volvo</div>
+                <div class="option" data-value="saab">Saab</div>
+                <!-- Other Option for Custom Input -->
+                <div class="group">Other</div>
+                <div class="option" id="otherOption">Other (Add your own)</div>
+            </div>
+        </div>
+
+        <!-- Input for custom car manufacturer -->
+        <div class="other-input-wrapper" id="otherInputWrapper">
+            <input type="text" id="otherInput" placeholder="Enter your car manufacturer...">
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Variables
+        const selectBox = document.getElementById('selectBox');
+        const selectOptions = document.getElementById('selectOptions');
+        const filterInput = document.getElementById('filterInput');
+        const options = document.querySelectorAll('.option');
+        const form = document.getElementById('carForm');
+        const otherOption = document.getElementById('otherOption');
+        const otherInputWrapper = document.getElementById('otherInputWrapper');
+        const otherInput = document.getElementById('otherInput');
+
+        // Toggle dropdown visibility
+        selectBox.addEventListener('click', function() {
+            selectOptions.style.display = selectOptions.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Filter options based on input
+        filterInput.addEventListener('input', function() {
+            const filterValue = filterInput.value.toLowerCase();
+            options.forEach(function(option) {
+                const text = option.textContent.toLowerCase();
+                if (text.includes(filterValue)) {
+                    option.style.display = 'block';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        });
+
+        // Handle selecting an option
+        options.forEach(function(option) {
+            option.addEventListener('click', function() {
+                selectBox.textContent = option.textContent; // Update select box text
+                if (option.id === 'otherOption') {
+                    otherInputWrapper.style.display = 'block'; // Show input field for custom manufacturer
+                } else {
+                    otherInputWrapper.style.display = 'none'; // Hide input field for custom manufacturer
+                }
+                selectOptions.style.display = 'none'; // Hide dropdown
+            });
+        });
+
+        // Close dropdown if clicking outside
+        document.addEventListener('click', function(event) {
+            if (!selectBox.contains(event.target) && !selectOptions.contains(event.target)) {
+                selectOptions.style.display = 'none';
+            }
+        });
+
+        // Handle form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent page reload
+
+            let selectedCar = selectBox.textContent;
+            if (selectedCar === "Choose a car") {
+                alert("Please select a car.");
+            } else if (selectedCar === "Other (Add your own)") {
+                selectedCar = otherInput.value.trim();
+                if (selectedCar === "") {
+                    alert("Please enter a car manufacturer.");
+                    return;
+                }
+            }
+
+            alert("You selected: " + selectedCar);
+        });
+    </script>
+
+</body>
+</html>

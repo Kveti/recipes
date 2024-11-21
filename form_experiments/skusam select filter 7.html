@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Manufacturer Form</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Optional: Add your styles -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Filter options based on input text
+        $(document).ready(function() {
+            $('#filter').on('input', function() {
+                var filterText = $(this).val().toLowerCase();
+                $('#car-manufacturer-select option').each(function() {
+                    var optionText = $(this).text().toLowerCase();
+                    if (optionText.indexOf(filterText) > -1) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="car-form" action="/submit-car" method="POST">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" placeholder="Enter a title for the form" required>
+        </div>
+
+        <div>
+            <label for="instructions">Instructions:</label>
+            <textarea id="instructions" name="instructions" rows="4" placeholder="Enter instructions for the form" required></textarea>
+        </div>
+
+        <div>
+            <label for="carManufacturer">Select Car Manufacturer:</label>
+            <input type="text" id="filter" placeholder="Filter car manufacturers...">
+            <select id="car-manufacturer-select" name="carManufacturer" required>
+                <optgroup label="German">
+                    <option value="Volkswagen">Volkswagen</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Audi">Audi</option>
+                </optgroup>
+                <optgroup label="Swedish">
+                    <option value="Volvo">Volvo</option>
+                    <option value="Scania">Scania</option>
+                </optgroup>
+                <option value="Other">Other (Please specify)</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="custom-manufacturer">Custom Manufacturer (if not listed):</label>
+            <input type="text" id="custom-manufacturer" name="customManufacturer" placeholder="Enter manufacturer name">
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
