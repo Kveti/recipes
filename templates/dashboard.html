@@ -56,7 +56,7 @@
                     <a href="/recipe/{{recipe.id}}"> {{ recipe.title }} </a> 
                 </div>
                 <div class="right-elements">
-                    <form action="{{ url_for('recipe_bp.recipe_edit', id=recipe.id) }}" method="POST" style="display:inline;">
+                    <form action="{{ url_for('recipe_bp.recipe_edit', id=recipe.id) }}" method="GET" style="display:inline;">
                         <button type="submit" class="btn btn-secondary" style="background-color: #007bff; border-color: #007bff;">Edit</button>
                     </form> |
                     <form action="{{ url_for('recipe_bp.delete_recipe', id=recipe.id) }}" method="POST" style="display:inline;">

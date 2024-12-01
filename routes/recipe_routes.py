@@ -69,26 +69,30 @@ def recipe_edit(id=None):
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
+    user_id = session["user_id"]
+    print(user_id)
+
     if request.method == 'POST':
         title = request.form['title']
-        ingredients = request.form['ingredients']
+        ingredients = request.form.getlist('ingredients[]')
         instructions = request.form['instructions']
 
         if id:
             recipe = Recipe.query.get(id)
             recipe.title = title
-            recipe.ingredients = ingredients
+            #recipe.ingredients = ingredients
             recipe.instructions = instructions
         else:
             recipe = Recipe(title=title, ingredients=ingredients, instructions=instructions, user_id=session['user_id'])
-            db.session.add(recipe)
+            
 
         db.session.commit()
         flash('Recipe saved successfully!', 'success')
-        return redirect(url_for(f'recipe/{id}'))
+        #return redirect(url_for(f'recipe_bp.recipe/{id}'))
+        return redirect(url_for('recipe_bp.recipe_show', id=id))
 
     recipe = Recipe.query.get(id) if id else None
-    return render_template('recipe_form.html', recipe=recipe)
+    return render_template('recipe_edit.html', recipe=recipe)
 
 @recipe_bp.route('/recipe/add', methods=['GET', 'POST'])
 def recipe_add():
